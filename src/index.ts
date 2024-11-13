@@ -3,6 +3,8 @@ import cors, { CorsOptions } from "cors";
 import connectToDatabase from "./database/mongo";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRouter";
+import validateAccessToken from "./middlewares/authMiddleware";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -20,10 +22,14 @@ const port = process.env.PORT || 3000;
 app.use(cors(corsConfig));
 app.use(express.json()); // for parsing json files
 app.options("*", cors(corsConfig));
-
+app.use(cookieParser()); // for parsing cookies
 //End point to check if the server is alive
 app.use("/ping", (req: Request, res: Response) => {
   res.send("pong");
+});
+
+app.get("/protected", validateAccessToken, (req: Request, res: Response) => {
+  res.send("protected login");
 });
 
 //Endpoints for login and signup
