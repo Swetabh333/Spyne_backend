@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors, { CorsOptions } from "cors";
+import connectToDatabase from "./database/mongo";
 
 const app: Application = express();
 
@@ -21,11 +22,16 @@ app.use("/ping", (req: Request, res: Response) => {
   res.send("pong");
 });
 
-//error starts listening if there are no errors.
-try {
-  app.listen(port, () => {
-    console.log(`Connected successfully to port ${port}`);
-  });
-} catch (err) {
-  console.log(err);
-}
+//top level async function to make sure everything works orderly
+const startServer = async () => {
+  try {
+    await connectToDatabase();
+    app.listen(port, () => {
+      console.log(`Connected successfully to port ${port}`);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+startServer();
