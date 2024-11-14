@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../schema/userSchema";
 import { generateToken, generateRefreshToken } from "../helper/tokenHelper";
 import { validationResult, body } from "express-validator";
+import validateAccessToken from "../middlewares/authMiddleware";
 
 const router: Router = express.Router();
 //Endpoint for registering a new user.
@@ -82,6 +83,20 @@ router.post(
     } catch (err) {
       res.status(500).json({ error: err });
     }
+  },
+);
+
+router.get(
+  "/logout",
+  validateAccessToken,
+  async (req: Request, res: Response) => {
+    res.cookie("accessToken", "", {
+      httpOnly: true,
+    });
+    res.cookie("refreshToken", "", {
+      httpOnly: true,
+    });
+    res.sendStatus(200);
   },
 );
 

@@ -13,9 +13,10 @@ const app: Application = express();
 
 // cors config to allow who is able to communicate with the backend and who isn't
 const corsConfig: CorsOptions = {
-  origin: "*",
+  origin: "http://localhost:5173",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  credentials: true,
 };
 
 const port = process.env.PORT || 3000;
@@ -30,8 +31,8 @@ app.use("/ping", (req: Request, res: Response) => {
   res.send("pong");
 });
 
-app.get("/protected", validateAccessToken, (req: Request, res: Response) => {
-  res.send("protected login");
+app.get("/verify", validateAccessToken, (req: Request, res: Response) => {
+  res.status(200).send("authenticated");
 });
 
 //Endpoints for login and signup

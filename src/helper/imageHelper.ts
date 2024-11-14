@@ -1,6 +1,6 @@
 import { supabase } from "../config/supabaseConfig";
 import { v4 as uuidv4 } from "uuid";
-
+import { decode } from "base64-arraybuffer";
 //helper function for uploading images
 export const uploadImage = async (
   file: Express.Multer.File,
@@ -12,7 +12,7 @@ export const uploadImage = async (
 
   const { error } = await supabase.storage
     .from("spyne-bucket")
-    .upload(filePath, file.buffer, {
+    .upload(filePath, decode(file.buffer.toString("base64")), {
       contentType: file.mimetype,
     });
 
