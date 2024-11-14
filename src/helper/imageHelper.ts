@@ -6,13 +6,16 @@ export const uploadImage = async (
   file: Express.Multer.File,
   userId: string,
 ) => {
+  console.log(file);
   const fileExt = file.originalname.split(".").pop();
   const fileName = `${uuidv4()}.${fileExt}`;
   const filePath = `users/${userId}/cars/${fileName}`;
 
-  const { error } = await supabase.storage
+  const fileBase64 = decode(file.buffer.toString("base64"));
+
+  const { data, error } = await supabase.storage
     .from("spyne-bucket")
-    .upload(filePath, decode(file.buffer.toString("base64")), {
+    .upload(filePath, decode("base64FileData"), {
       contentType: file.mimetype,
     });
 
@@ -20,8 +23,10 @@ export const uploadImage = async (
     throw new Error("Error uploading image");
   }
 
-  const { data } = supabase.storage.from("spyne-bucket").getPublicUrl(filePath);
-  return data.publicUrl;
+  const { data: image } = supabase.storage
+    .from("spyne-bucket")
+    .getPublicUrl(data.path);
+  return image.publicUrl;
 };
 
 //helper function for deleting the image
