@@ -1,19 +1,20 @@
-import mongoose, { Date, Document,Schema,Types } from "mongoose";
+import mongoose, { Date, Document, Schema, Types } from "mongoose";
 import { userDocument } from "./userSchema";
 
-export interface carDocument extends Document{
-	title:string;
-	description:string;
-	tags:string[];
-	imageUrls:string[],
-	imageCount:number,
-	user:Types.ObjectId | userDocument;
-	createdAt:Date,
-	updatedAt:Date
+export interface carDocument extends Document {
+  title: string;
+  description: string;
+  tags: string[];
+  imageUrls: string[];
+  imageCount: number;
+  user: Types.ObjectId | userDocument;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-const carSchema = new Schema<carDocument>({
-	title: {
+const carSchema = new Schema<carDocument>(
+  {
+    title: {
       type: String,
       required: true,
     },
@@ -37,13 +38,13 @@ const carSchema = new Schema<carDocument>({
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.model("Car",carSchema);
+export default mongoose.model("Car", carSchema);
