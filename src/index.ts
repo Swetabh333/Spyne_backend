@@ -3,6 +3,7 @@ import cors, { CorsOptions } from "cors";
 import connectToDatabase from "./database/mongo";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRouter";
+import carRouter from "./routes/carRouter";
 import validateAccessToken from "./middlewares/authMiddleware";
 import cookieParser from "cookie-parser";
 
@@ -34,7 +35,7 @@ app.get("/protected", validateAccessToken, (req: Request, res: Response) => {
 
 //Endpoints for login and signup
 app.use("/auth", authRouter);
-
+app.use("/api/cars", carRouter);
 //top level async function to make sure everything works orderly
 const startServer = async () => {
   try {
