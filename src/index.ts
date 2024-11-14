@@ -22,6 +22,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors(corsConfig));
 app.use(express.json()); // for parsing json files
+app.use(express.urlencoded({ extended: true }));
 app.options("*", cors(corsConfig));
 app.use(cookieParser()); // for parsing cookies
 //End point to check if the server is alive

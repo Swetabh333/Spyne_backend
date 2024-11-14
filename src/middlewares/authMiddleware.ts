@@ -14,7 +14,6 @@ const validateAccessToken = async (
   next: NextFunction,
 ) => {
   try {
-    console.log(req.cookies);
     const accessToken = req.cookies.accessToken;
     if (!accessToken) {
       const refreshToken = req.cookies.refreshToken;
@@ -48,6 +47,7 @@ const validateAccessToken = async (
     }
   } catch (err) {
     res.status(500).json({ error: "Invalid access or refresh token" });
+    console.log(err);
   }
 };
 
