@@ -13,7 +13,7 @@ const app: Application = express();
 
 // cors config to allow who is able to communicate with the backend and who isn't
 const corsConfig: CorsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
   credentials: true,
