@@ -74,10 +74,14 @@ router.post(
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         maxAge: 15 * 60 * 1000,
+        secure: true,
+        sameSite: "none",
       }); // 15 minutes
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "none",
       }); //7days
       res.json({ message: "Successfully logged in" });
     } catch (err) {
@@ -95,6 +99,8 @@ router.get(
     });
     res.cookie("refreshToken", "", {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
     res.sendStatus(200);
   },
