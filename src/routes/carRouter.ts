@@ -14,12 +14,83 @@ interface AuthRequest extends Request {
 }
 
 //endpoint for uploading car data
+
+S
+since I have similar routes but different methods for some endpoints how to structure the annotations then?
+
+
+For endpoints that share the same path but have different HTTP methods, you can combine their documentation under the same path. Here's how to structure it:
+
+typescript
+
+Copy
+/**
+ * @swagger
+ * /cars:
+ *   post:
+ *     summary: Create a new car listing
+ *     security:
+ *       - cookieAuth: []
+ *     tags: [Cars]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - images
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       201:
+ *         description: Car created successfully
+ *       400:
+ *         description: Invalid input or missing images
+ *       401:
+ *         description: Unauthorized
+ *         
+ *   get:
+ *     summary: Get all cars for authenticated user
+ *     security:
+ *       - cookieAuth: []
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term for filtering cars
+ *     responses:
+ *       200:
+ *         description: List of cars
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Car'
+ *       401:
+ *         description: Unauthorized
+ */
 router.post(
   "/",
   validateAccessToken,
   upload.array("images", 10),
   async (req: AuthRequest, res: Response) => {
-    console.log("invoked");
     try {
       const { title, description, tags } = req.body;
       const files = req.files as Express.Multer.File[];
@@ -56,7 +127,6 @@ router.post(
   },
 );
 
-//Endpoint to get all the data for one user
 router.get('/', validateAccessToken, async (req: AuthRequest, res: Response) => {
   try {
     const { search } = req.query;
@@ -80,7 +150,87 @@ router.get('/', validateAccessToken, async (req: AuthRequest, res: Response) => 
   }
 });
 
-// Endpoint to get details for a specific car
+/**
+ * @swagger
+ * /cars/{id}:
+ *   get:
+ *     summary: Get a specific car
+ *     security:
+ *       - cookieAuth: []
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Car details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Car'
+ *       404:
+ *         description: Car not found
+ * 
+ *   put:
+ *     summary: Update a car
+ *     security:
+ *       - cookieAuth: []
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               images:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *               deletedImages:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Car updated successfully
+ *       404:
+ *         description: Car not found
+ * 
+ *   delete:
+ *     summary: Delete a car
+ *     security:
+ *       - cookieAuth: []
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Car deleted successfully
+ *       404:
+ *         description: Car not found
+ */
 router.get('/:id', validateAccessToken, async (req: AuthRequest, res: Response) => {
   try {
     const car = await Car.findOne({
@@ -102,7 +252,6 @@ router.get('/:id', validateAccessToken, async (req: AuthRequest, res: Response) 
 
 
 
-//Endpoint for updating a car's details
 router.put(
   "/:id",
   validateAccessToken,
@@ -157,7 +306,6 @@ router.put(
   },
 );
 
-//Endpoint for deleting a car
 
 router.delete('/:id', validateAccessToken, async (req: AuthRequest, res: Response) => {
   try {

@@ -6,6 +6,8 @@ import authRouter from "./routes/authRouter";
 import carRouter from "./routes/carRouter";
 import validateAccessToken from "./middlewares/authMiddleware";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import specs from "./docs/swagger";
 
 dotenv.config();
 
@@ -34,6 +36,8 @@ app.use("/ping", (req: Request, res: Response) => {
 app.get("/verify", validateAccessToken, (req: Request, res: Response) => {
   res.status(200).send("authenticated");
 });
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 //Endpoints for login and signup
 app.use("/auth", authRouter);
