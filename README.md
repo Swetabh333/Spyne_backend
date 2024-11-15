@@ -15,9 +15,6 @@ title, description, tags match the keyword.
 
 The project is deployed at [https://spyne-backend-six.vercel.app/](https://spyne-backend-six.vercel.app/) .
 
-[Here](https://app.swaggerhub.com/apis-docs/SWETABHSHREYAM333/Makerble/1.0) is the api documentation.
-
-
 
 The backend exposes the follwing apis :
 
@@ -26,6 +23,10 @@ The backend exposes the follwing apis :
 - **`/ping`**
   - **Method:** GET
   - **Description:** To check if the program is alive and running.
+
+- **`/api/docs`**
+  - **Method:** GET
+  - **Description:** To check the apis.
 
 ### Authentication Routes
 

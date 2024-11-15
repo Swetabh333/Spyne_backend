@@ -42,7 +42,6 @@ const router: Router = express.Router();
  *         description: Server error
  */
 
-
 router.post(
   "/register",
   body("email").isEmail().withMessage("Invalid email address"), // email and password verification
@@ -153,6 +152,20 @@ router.post(
     }
   },
 );
+/**
+ * @swagger
+ * /auth/logout:
+ *   get:
+ *     summary: Logout user
+ *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *       401:
+ *         description: Unauthorized
+ */
 
 router.get(
   "/logout",
